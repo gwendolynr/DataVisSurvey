@@ -1,0 +1,127 @@
+---
+title: "Tucson Data Visualisation Survey"
+Date: April 26, 2017
+output:
+  html_document: default
+  html_notebook: default
+  pdf_document: default
+Author: Gwendolyn Reynolds
+---
+
+Thank you for participating in my Data Visualisation Game and Survey! It was great to participate in the 2017 Using Data for Social Change Forum. 
+
+At the conference, I presented four graphs using the same dataset, Arizona property and violent crime data from 1960 to 2014. I downloaded the data from the Uniform Crime Reporting Statistics--UCR Data Online: http://www.ucrdatatool.gov/ on April 11, 2017. 
+
+The four graphs show Arizona property and violent crime in a scatterplot, a bar graph, and two different line graphs (one with less detail and one with more detail). 
+
+I then asked participants to answer four questions: 
+
+* Which graph shows the most information?
+
+* Which graph is the easiest to understand? 
+
+* Which graph is the most difficult to understand?
+
+* Which graph would you put in a newspaper? 
+
+The four graphs I presented are below. 
+
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+# Load packages 
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(scales)
+library(forcats)
+library(lubridate)
+library(stringr)
+
+# Echo=FALSE means the code does not show up in the document
+# Caching allows you to re-run the report quickly
+knitr::opts_chunk$set(echo=FALSE)
+knitr::opts_chunk$set(cache=TRUE)
+knitr::opts_chunk$set(message = F) #Use this to suppress all messages from chunks for finalized report
+knitr::opts_chunk$set(warning = F) #Use this to suppress all warnings from chunks for finalized report
+
+
+# Setting the default resolution of plots
+knitr::opts_chunk$set(dpi = 300)
+
+# You can't just set the working directory when using .rmd in Knitr, so we set the root directory
+# This is to make it easy to load data from the google drive
+# All figures and cache are still saving in the same directory as the .rmd (don't commit these)
+setwd("~/Google Drive/SI/DataScience/Presentations/Tuscon_April2017")
+knitr::opts_knit$set(root.dir = '~/Google Drive/SI/DataScience/Presentations/Tuscon_April2017/')
+
+```
+
+#### Graph 1 (scatterplot)
+
+![](../../Google Drive/SI/DataScience/Presentations/Tuscon_April2017/point.png)
+
+#### Graph 2 (bar)
+
+![](../../Google Drive/SI/DataScience/Presentations/Tuscon_April2017/bargraph.png)
+
+#### Graph 3 (line)
+
+![](../../Google Drive/SI/DataScience/Presentations/Tuscon_April2017/linegraph.png)
+
+#### Graph 4 (line-more)
+
+![](../../Google Drive/SI/DataScience/Presentations/Tuscon_April2017/linegraphall.png)
+```{r load data, echo=FALSE, warning=FALSE, message=FALSE}
+
+results <- read.csv("./DataVisualizationSurvey.csv")
+
+```
+
+The results of the four questions are presented below (as bar graphs!). The results show the scatterplot is generally considered the most diffcult to understand, while the simple line graph is considered the easiest to understand as well as the graph most selected to be used in a newspaper. The bar graph was a close second for easiest to understand and most likely to be put in a newspaper. The more complicated line graph was selected almost exclusively as the graph showing the most information. 
+
+```{r visualize results, echo=FALSE, warning=FALSE, message=FALSE}
+
+#summary(results)
+
+n = c("Graph 1 (scatterplot)", "Graph 2 (bar)", "Graph 3 (line)", "Graph 4 (line-more)")
+a = c(1, 1, 0, 33)
+b = c(2, 13, 17, 4)
+c = c(15, 6, 3, 12)
+d = c(4, 12, 15, 4)
+
+most_info = data.frame(n, a)
+Easy_Under = data.frame(n, b)
+Diff_Under = data.frame(n, c)
+News = data.frame(n, d)
+
+most_info %>%
+  ggplot(aes(x = n, y = a, fill=n)) +
+  geom_bar(stat="identity") + guides(fill=FALSE) +
+  ylab("") + xlab("") +
+  ggtitle("Which Graph Shows the Most Information?") +
+  theme_minimal()
+
+Easy_Under %>%
+  ggplot(aes(x = n, y = b, fill=n)) +
+  geom_bar(stat="identity") + guides(fill=FALSE) +
+  ylab("") + xlab("") +
+  ggtitle("Which Graph is the Easiest to Understand?") +
+  theme_minimal()
+
+Diff_Under %>%
+  ggplot(aes(x = n, y = c, fill=n)) +
+  geom_bar(stat="identity") + guides(fill=FALSE) +
+  ylab("") + xlab("") +
+  ggtitle("Which Graph is the Most Difficult to Understand?") +
+  theme_minimal()
+
+News %>%
+  ggplot(aes(x = n, y = d, fill=n)) +
+  geom_bar(stat="identity") + guides(fill=FALSE) +
+  ylab("") + xlab("") +
+  ggtitle("Which Graph Would You Put in a Newspaper?") +
+  theme_minimal()
+
+
+```
+
